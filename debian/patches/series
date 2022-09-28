@@ -1,0 +1,5 @@
+xmpsdk-integer-typedef-x64.patch
+fix-man-page-table-formatting.patch
+fcf-protection-only-on-x86.diff
+CVE-2021-31291.patch
+CVE-2021-31292.patch
