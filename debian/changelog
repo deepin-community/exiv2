@@ -1,24 +1,248 @@
-exiv2 (0.27.3-3.1deepin0) unstable; urgency=medium
+exiv2 (0.28.4+dfsg-1) unstable; urgency=medium
 
-  * No source change upload against GCC 12.
+  * Team upload.
+  * New upstream release.
+  * Update the patches:
+    - cmake-no-private.diff: drop, fixed upstream
+  * Bump standards version to 4.7.0, no changes required.
+  * Drop breaks/replaces for versions older than what is in Debian Bullseye.
 
- -- Tianyu Chen <sweetyfish@deepin.org>  Thu, 19 Sep 2024 22:45:51 +0800
+ -- Pino Toscano <pino@debian.org>  Mon, 10 Feb 2025 17:43:14 +0100
 
-exiv2 (0.27.3-3.1) unstable; urgency=medium
+exiv2 (0.28.3+dfsg-2) unstable; urgency=medium
 
-  * Non-maintainer upload.
-  * Upload changes from 0.27.3-3+deb11u1 to unstable to make sure the version
-    in unstable is higher than the bullseye-security upload and including the
-    needed CVE fixes.
+  * Team upload.
+  * Upload to unstable (see #1080439).
 
- -- Salvatore Bonaccorso <carnil@debian.org>  Mon, 04 Oct 2021 20:56:31 +0200
+ -- Pino Toscano <pino@debian.org>  Thu, 05 Sep 2024 19:02:33 +0200
 
-exiv2 (0.27.3-3+deb11u1) bullseye-security; urgency=medium
+exiv2 (0.28.3+dfsg-1) experimental; urgency=medium
 
-  * CVE-2021-31291 (Closes: #991705)
-  * CVE-2021-31292 (Closes: #991706)
+  * Team upload.
+  * New upstream release.
 
- -- Moritz Muehlenhoff <jmm@debian.org>  Fri, 06 Aug 2021 10:57:42 +0200
+ -- Pino Toscano <pino@debian.org>  Sat, 13 Jul 2024 12:56:53 +0200
+
+exiv2 (0.28.2+dfsg-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream release:
+    - fixes CVE-2024-24826, and CVE-2024-25112
+  * Update the patches:
+    - upstream_install-exiv2-cmake-module-in-LIBDIR.patch: drop, backported
+      from upstream
+    - upstream_tests-fix-parsing-w-path-containing-pa-or-pS.patch: drop,
+      backported from upstream
+    - cmake-restore-a-exiv2lib-target.diff: drop, fixed upstream
+  * Update the symbols file.
+
+ -- Pino Toscano <pino@debian.org>  Fri, 16 Feb 2024 06:21:00 +0100
+
+exiv2 (0.28.1+dfsg-3) experimental; urgency=medium
+
+  * Team upload.
+  * Replace patch tests-fix-parsing-w-path-containing-pa-or-pS.diff with the
+    upstream commit 1667bb947e5b74db0dc47ba642fc9e5fa86f1484; patch
+    upstream_tests-fix-parsing-w-path-containing-pa-or-pS.patch.
+  * Backport the upstream PR https://github.com/Exiv2/exiv2/pull/2832 to restore
+    the "exiv2lib" cmake target; patch cmake-restore-a-exiv2lib-target.diff.
+  * Stop requiring the static dependencies from the cmake config file; patch
+    cmake-no-private.diff.
+
+ -- Pino Toscano <pino@debian.org>  Fri, 17 Nov 2023 12:03:09 +0100
+
+exiv2 (0.28.1+dfsg-2) experimental; urgency=medium
+
+  * Team upload.
+  * Replace patch cmake-config-installdir.diff with the upstream commit
+    c351c7cce317571934abf693055779a59df30d6e; patch
+    upstream_install-exiv2-cmake-module-in-LIBDIR.patch.
+  * Backport the upstream PR https://github.com/Exiv2/exiv2/pull/2826 to fix
+    one test case of tiffTest in case the full source path contains "-pa" or
+    "-pS" (e.g. the "reproducible-path" component used since recent times on
+    buildds); patch tests-fix-parsing-w-path-containing-pa-or-pS.diff.
+
+ -- Pino Toscano <pino@debian.org>  Sun, 12 Nov 2023 01:36:45 +0100
+
+exiv2 (0.28.1+dfsg-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream release:
+    - fixes CVE-2023-44398 (Closes: #1055470)
+  * Update the patches:
+    - upstream_avoid-LTO-issues.patch: drop, backported from upstream
+    - upstream_asf-fix-GUID-reading-on-big-endian-platforms.patch: drop,
+      backported from upstream
+    - tests-do-not-hardcode-ENOENT.diff: drop, fixed upstream
+  * Backport the upstream PR https://github.com/Exiv2/exiv2/pull/2819 to fix
+    the installation of the CMake config files in the library directory;
+    cmake-config-installdir.diff.
+
+ -- Pino Toscano <pino@debian.org>  Mon, 06 Nov 2023 22:41:59 +0100
+
+exiv2 (0.28.0+dfsg-4) experimental; urgency=medium
+
+  * Team upload.
+  * Replace patch asf-fix-GUID-reading-on-big-endian-platforms.diff with the
+    upstream commit 2d5a51b9ddcecaa747ef4de8b0de22a3e0e89dd1; patch
+    upstream_asf-fix-GUID-reading-on-big-endian-platforms.patch.
+  * Backport the upstream PR https://github.com/Exiv2/exiv2/pull/2700 to fix
+    a unit test on GNU/Hurd; patch tests-do-not-hardcode-ENOENT.diff.
+  * Update symbols files from the logs of buildds.
+
+ -- Pino Toscano <pino@debian.org>  Tue, 18 Jul 2023 06:55:44 +0200
+
+exiv2 (0.28.0+dfsg-3) experimental; urgency=medium
+
+  * Team upload.
+  * Tweak AdditionOverflowInLoaderExifJpeg for 32bit platforms with
+    unsigned char, see https://github.com/Exiv2/exiv2/issues/933;
+    patch tests-overflow-skip-unsigned-char-23bit.diff.
+  * Update symbols files from the logs of buildds.
+
+ -- Pino Toscano <pino@debian.org>  Sun, 16 Jul 2023 14:36:07 +0200
+
+exiv2 (0.28.0+dfsg-2) experimental; urgency=medium
+
+  * Team upload.
+  * Explicitly add the python3:any build dependency, used to run the test suite.
+  * Update symbols files from the logs of buildds.
+  * Backport upstream commit 7b51b7c97967eb45fe7cd0fbe55a8fc260fd1a46 to fix
+    issues when using LTO; patch upstream_avoid-LTO-issues.patch.
+  * Backport the upstream PR https://github.com/Exiv2/exiv2/pull/2694 to fix
+    big endian issues in the ASF format; patch
+    asf-fix-GUID-reading-on-big-endian-platforms.diff.
+  * Enable also the unit tests during build:
+    - add the libgmock-dev, and libgtest-dev build dependencies
+    - pass -DEXIV2_BUILD_UNIT_TESTS=ON to cmake
+
+ -- Pino Toscano <pino@debian.org>  Sun, 16 Jul 2023 10:55:51 +0200
+
+exiv2 (0.28.0+dfsg-1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream release:
+    - fixes a regression on Olympus Maker notes (Closes: #1034641)
+  * Update the patches:
+    - xmpsdk-integer-typedef-x64.patch: drop, fixed upstream
+  * Update the build dependencies according to the upstream build system:
+    - bump cmake to 3.11.0
+    - add libbrotli-dev, libinih-dev (Closes: #1036248)
+  * Update packages according to the upstream SONAME bump:
+    - rename libexiv2-27 to libexiv2-28
+    - update install files & symbols file
+  * Do not run the tests in parallel, as there are path conflicts between the
+    tests.
+  * Update install files.
+  * Simplify the dh_auto_configure run to be one, enabling the documentation
+    depending on whether the doc package needs to be built.
+  * Split the data files (currently only translations) out of the library
+    package into a new arch:all libexiv2-data.
+  * Drop -Wno-deprecated-declarations from the CXXFLAGS: exiv2 no longer uses
+    std::auto_ptr<>.
+  * Drop the exclusion from dh_compress of .xls, .idx, .php, and .cpp, as they
+    either do not exist anymore or they are not compressed by dh_compress.
+  * Update copyright.
+  * Exclude test/data/issue_1934_poc4_ref.icc, as it is a copy of sRGB.icm
+    which is not free
+    - exclude also test/data/issue_1934_poc4.jpg, which contains the ICM file
+    - set the version suffix to +dfsg
+    - adapt watch file for repack
+    - add patch non-free.diff to drop the references to the excluded files in
+      the tests
+  * Drop the private/static markers from the exiv2.pc pkg-config file; patch
+    pkgconfig-no-private.diff.
+
+ -- Pino Toscano <pino@debian.org>  Sat, 15 Jul 2023 10:55:38 +0200
+
+exiv2 (0.27.6-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Update standards version to 4.6.2, no changes needed.
+  * Update Vcs-* fields.
+  * Use execute_after_dh_* to avoid invoking dh_* manually
+  * Execute chrpath right after dh_auto_install, rather than after dh_install.
+  * Update the build dependencies according to the upstream build system:
+    - bump cmake to 3.7.2
+  * Remove non-existing file from copyright.
+  * Rename debian/docs to debian/exiv2.docs, to make it clearer (and consistent
+    with other files) to which package it refers to.
+
+ -- Pino Toscano <pino@debian.org>  Sat, 28 Jan 2023 11:45:47 +0100
+
+exiv2 (0.27.5-4) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Sandro Knauß ]
+  * Update symbol file for gcc-12 (Closes: #1012920).
+  * Update Standards-Version to 4.6.1 (No changes needed).
+  * Update symbols for link time optimation (Closes: #1015399).
+
+ -- Sandro Knauß <hefee@debian.org>  Mon, 22 Aug 2022 14:33:14 +0200
+
+exiv2 (0.27.5-3) unstable; urgency=medium
+
+  * Team upload.
+  * Update symbols from buildds.
+
+ -- Sandro Knauß <hefee@debian.org>  Sat, 26 Mar 2022 18:35:36 +0100
+
+exiv2 (0.27.5-2) unstable; urgency=medium
+
+  * Team upload.
+  * Update Multi-Arch information for -dev and -doc.
+  * Enable BMFF support (Closes: #1000788)
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
+  * Fix day-of-week for changelog entry 0.10-1.
+  * Enable hardening.
+  * Update symbols from buildds.
+  * Register documentation via doc-base.
+  * Update symbols for BMFF support.
+
+ -- Sandro Knauß <hefee@debian.org>  Fri, 25 Mar 2022 01:00:00 +0100
+
+exiv2 (0.27.5-1) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Simon Schmeisser ]
+  * New upstream release (Closes: #1000788):
+    - fixes CVE-2021-29458 (Closes: #987277)
+    - fixes CVE-2021-29463 (Closes: #988241)
+    - fixes CVE-2021-29464 (Closes: #988242)
+    - fixes CVE-2021-29470 (Closes: #987450)
+    - fixes CVE-2021-29473 (Closes: #987736)
+    - fixes CVE-2021-29623 (Closes: #988481)
+    - fixes CVE-2021-32617 (Closes: #988731)
+    - fixes CVE-2021-32815 (Closes: #992705)
+    - fixes CVE-2021-34334 (Closes: #992706)
+    - fixes CVE-2021-34335 (Closes: #992707)
+    - fixes CVE-2021-3482 (Closes: #986888)
+    - fixes CVE-2021-37615
+    - fixes CVE-2021-37616
+    - fixes CVE-2021-37618
+    - fixes CVE-2021-37619
+    - fixes CVE-2021-37620
+    - fixes CVE-2021-37621
+    - fixes CVE-2021-37622
+    - fixes CVE-2021-37623
+  * Remove patches that have been fixed upstream:
+    - fix-man-page-table-formatting.patch
+    - fcf-protection-only-on-x86.diff
+  * Update symbols file
+
+  [ Sandro Knauß ]
+  * Remove cruft dbg->dbgsym package dependency.
+  * Bump Standards-Version to 4.6.0 (No changes needed).
+  * Bump compat level to 13.
+  * Bring copyright file in line with DEP-5.
+  * Remove maxy from Uploaders list.
+  * Cleanup copyright file.
+
+ -- Sandro Knauß <hefee@debian.org>  Thu, 10 Feb 2022 20:05:47 +0100
 
 exiv2 (0.27.3-3) unstable; urgency=medium
 
@@ -713,7 +937,7 @@ exiv2 (0.10-1) unstable; urgency=low
 
   * New Upstream Release. (Fixes: #370151)
 
- -- KELEMEN Peter <fuji@debian.org>  Tue, 14 Jun 2006 00:02:57 +0200
+ -- KELEMEN Peter <fuji@debian.org>  Wed, 14 Jun 2006 00:02:57 +0200
 
 exiv2 (0.9.1-1) unstable; urgency=low
 

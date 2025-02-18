@@ -79,7 +79,7 @@ if __name__ == '__main__':
         description="Build and test exiv2 using a matrix of build switches")
     parser.add_argument(
         "--compilers",
-        help="Compilers to be used to build exiv2 (when none ore specified, "
+        help="Compilers to be used to build exiv2 (when none are specified, "
         "then the default compiler will be used)",
         nargs='*',
         default=["gcc", "clang"],
@@ -116,8 +116,8 @@ if __name__ == '__main__':
         help="Additional flags for cmake",
         type=str,
         nargs='?',
-        default="-DEXIV2_TEAM_EXTRA_WARNINGS=ON -DEXIV2_ENABLE_VIDEO=ON "
-        "-DEXIV2_ENABLE_WEBREADY=ON -DEXIV2_BUILD_UNIT_TESTS=ON "
+        default="-DEXIV2_TEAM_EXTRA_WARNINGS=ON "
+        "-DEXIV2_ENABLE_WEBREADY=ON -DEXIV2_BUILD_UNIT_TESTS=ON -DEXIV2_ENABLE_BMFF=ON "
         "-DBUILD_WITH_CCACHE=ON -DEXIV2_ENABLE_CURL=ON"
     )
 

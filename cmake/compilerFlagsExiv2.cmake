@@ -1,8 +1,14 @@
 # These flags only applies to exiv2lib, and the applications, but not to the xmp code
 
+include(CheckCXXCompilerFlag)
+
 if (COMPILER_IS_GCC OR COMPILER_IS_CLANG) # MINGW, Linux, APPLE, CYGWIN
     if ( EXIV2_TEAM_WARNINGS_AS_ERRORS )
-        add_compile_options(-Werror -Wno-error=deprecated-declarations)
+        add_compile_options(-Werror)
+        check_cxx_compiler_flag(-Wdeprecated-copy DEPRECATED_COPY)
+        if ( DEPRECATED_COPY) 
+            add_compile_options(-Wdeprecated-copy)
+        endif ()
     endif ()
 
     if ( EXIV2_TEAM_EXTRA_WARNINGS )
@@ -15,10 +21,10 @@ if (COMPILER_IS_GCC OR COMPILER_IS_CLANG) # MINGW, Linux, APPLE, CYGWIN
                     " -Wlogical-op"
                     " -Wdouble-promotion"
                     " -Wshadow"
-                    " -Wuseless-cast"
                     " -Wpointer-arith" # This warning is also enabled by -Wpedantic
                     " -Wformat=2"
                     #" -Wold-style-cast"
+                    #" -Wuseless-cast" Disabled mainly because of conversion of socket types (different types on OSs)
                 )
             endif ()
 

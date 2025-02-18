@@ -1,25 +1,21 @@
-// ***************************************************************** -*- C++ -*-
-// convert-test.cpp
+// SPDX-License-Identifier: GPL-2.0-or-later
 // Conversion test driver - make sure you have a copy of the input file around!
 
 #include <exiv2/exiv2.hpp>
 
 #include <iostream>
-#include <iomanip>
-#include <cassert>
 
-int main(int argc, char* const argv[])
-try {
+int main(int argc, char* const argv[]) {
+  try {
     Exiv2::XmpParser::initialize();
     ::atexit(Exiv2::XmpParser::terminate);
 
     if (argc != 2) {
-        std::cout << "Usage: " << argv[0] << " file\n";
-        return 1;
+      std::cout << "Usage: " << argv[0] << " file\n";
+      return EXIT_FAILURE;
     }
 
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(argv[1]);
-    assert(image.get() != 0);
+    auto image = Exiv2::ImageFactory::open(argv[1]);
     image->readMetadata();
 
     Exiv2::XmpData xmpData;
@@ -31,10 +27,10 @@ try {
     image->setXmpData(xmpData);
     image->setExifData(exifData);
     image->writeMetadata();
-    
-    return 0;
-}
-catch (Exiv2::AnyError& e) {
+
+    return EXIT_SUCCESS;
+  } catch (Exiv2::Error& e) {
     std::cout << "Caught Exiv2 exception '" << e << "'\n";
-    return -1;
+    return EXIT_FAILURE;
+  }
 }

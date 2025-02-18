@@ -13,8 +13,7 @@ COPYING                                         GPLv2.0 Software License
 Deliverable                                     Location
 -----------                                     --------
 exiv2 and sample applications                   bin/exiv2
-libraries                                       lib/libexiv2.so.@VM@.@VN@.@VD@@VR@ & libexiv2-xmp.a
-pkg-config file                                 lib/pkgconfig/exiv2.pc
+shared library                                  lib/libexiv2.so.@VM@.@VN@.@VD@@VR@
 CMake support/consume files                     lib/cmake/exiv2
 pkg-config file                                 lib/pkgconfig/exiv2.pc
 man pages                                       share/man/
@@ -25,7 +24,7 @@ build and test log                              logs/build.txt
 To run exiv2 from the bundle
 ----------------------------
 $ cd <bundle>
-$ bin/exiv2
+$ env LD_LIBRARY_PATH="$PWD/lib:$LD_LIBRARY_PATH" bin/exiv2
 
 To build samples/exiftool.cpp from the bundle
 ---------------------------------------------
@@ -64,4 +63,4 @@ $ man exiv2
 
 Robin Mills
 robin@clanmills.com
-Updated: 2020-04-22
+Updated: 2020-03-19
