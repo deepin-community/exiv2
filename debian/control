@@ -2,25 +2,30 @@ Source: exiv2
 Section: graphics
 Priority: optional
 Maintainer: Debian KDE Extras Team <pkg-kde-extras@lists.alioth.debian.org>
-Uploaders: Mark Purcell <msp@debian.org>, Steve M. Robbins <smr@debian.org>,
-           Maximiliano Curia <maxy@debian.org>
+Uploaders: Mark Purcell <msp@debian.org>,
+           Steve M. Robbins <smr@debian.org>
 Build-Depends: chrpath,
-               cmake,
-               debhelper-compat (= 12),
+               cmake (>= 3.11.0~),
+               debhelper-compat (= 13),
                gettext,
+               libbrotli-dev,
+               libgmock-dev,
+               libgtest-dev,
+               libinih-dev,
                libexpat1-dev,
                pkg-kde-tools,
-               zlib1g-dev
+               python3:any,
+               zlib1g-dev,
 Build-Depends-Indep: doxygen, graphviz, libjs-jquery, xsltproc
-Standards-Version: 4.5.0
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Homepage: https://www.exiv2.org/
-Vcs-Browser: https://salsa.debian.org/qt-kde-team/extras/exiv2
-Vcs-Git: https://salsa.debian.org/qt-kde-team/extras/exiv2.git
+Vcs-Browser: https://salsa.debian.org/qt-kde-team/3rdparty/exiv2
+Vcs-Git: https://salsa.debian.org/qt-kde-team/3rdparty/exiv2.git
 
 Package: exiv2
 Architecture: any
-Depends: libexiv2-27 (= ${binary:Version}), ${misc:Depends}, ${shlibs:Depends}
+Depends: libexiv2-28 (= ${binary:Version}), ${misc:Depends}, ${shlibs:Depends}
 Description: EXIF/IPTC/XMP metadata manipulation tool
  Exiv2 is a C++ library and a command line utility to manage image metadata.
  It provides fast and easy read and write access to the Exif, IPTC and XMP
@@ -40,13 +45,12 @@ Description: EXIF/IPTC/XMP metadata manipulation tool
   * print, set and delete the JPEG comment of JPEG images
   * fix the Exif ISO setting of picture taken with Canon and Nikon cameras
 
-Package: libexiv2-27
+Package: libexiv2-28
 Section: libs
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libexiv2-dev (<< 0.27.2-7~)
-Replaces: libexiv2-dev (<< 0.27.2-7~)
+Depends: ${misc:Depends}, ${shlibs:Depends},
+         libexiv2-data (>= ${source:Version}),
 Suggests: exiv2
 Multi-Arch: same
 Description: EXIF/IPTC/XMP metadata manipulation library
@@ -67,12 +71,24 @@ Description: EXIF/IPTC/XMP metadata manipulation library
     thumbnails
   * set and delete methods for Exif thumbnails
 
+Package: libexiv2-data
+Architecture: all
+Depends: ${misc:Depends}
+Breaks: libexiv2-27 (<< 0.28~)
+Replaces: libexiv2-27 (<< 0.28~)
+Multi-Arch: foreign
+Description: EXIF/IPTC/XMP metadata manipulation library - shared data
+ Exiv2 is a C++ library and a command line utility to manage image metadata.
+ It provides fast and easy read and write access to the Exif, IPTC and XMP
+ metadata of images in various formats
+ .
+ This package provides the data files of the exiv2 library.
+
 Package: libexiv2-dev
 Section: libdevel
 Architecture: any
-Depends: libexiv2-27 (= ${binary:Version}), ${misc:Depends}
-Breaks: libexiv2-27 (<< 0.27.2-8~)
-Replaces: libexiv2-27 (<< 0.27.2-8~)
+Multi-Arch: same
+Depends: libexiv2-28 (= ${binary:Version}), ${misc:Depends}
 Suggests: libexiv2-doc
 Description: EXIF/IPTC/XMP metadata manipulation library - development files
  Exiv2 is a C++ library and a command line utility to manage image metadata.
@@ -85,6 +101,7 @@ Package: libexiv2-doc
 Depends: libjs-jquery, ${misc:Depends}
 Section: doc
 Architecture: all
+Multi-Arch: foreign
 Description: EXIF/IPTC/XMP metadata manipulation library - HTML documentation
  Exiv2 is a C++ library and a command line utility to manage image metadata.
  It provides fast and easy read and write access to the Exif, IPTC and XMP

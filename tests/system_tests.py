@@ -5,30 +5,18 @@ import os
 import inspect
 import subprocess
 import threading
-import shlex
 import sys
 import shutil
 import string
 import unittest
 
+from bash_tests import utils as BT
 
 if sys.platform in [ 'win32', 'msys', 'cygwin' ]:
-    #: invoke subprocess.Popen with shell=True on Windows
-    _SUBPROCESS_SHELL = True
-
-    def _cmd_splitter(cmd):
-        return cmd
-
     def _process_output_post(output):
         return output.replace('\r\n', '\n')
 
 else:
-    #: invoke subprocess.Popen with shell=False on Unix
-    _SUBPROCESS_SHELL = False
-
-    def _cmd_splitter(cmd):
-        return shlex.split(cmd)
-
     def _process_output_post(output):
         return output
 
@@ -68,7 +56,7 @@ class CasePreservingConfigParser(configparser.ConfigParser):
     The default behavior of ConfigParser:
     >>> conf_string = "[Section1]\nKey = Value"
     >>> default_conf = configparser.ConfigParser()
-    >>> default_conf.read_string(conf_string)
+    >>> default_Config.read_string(conf_string)
     >>> list(default_conf['Section1'].keys())
     ['key']
 
@@ -151,13 +139,12 @@ def configure_suite(config_file):
                 )
             )
 
-    # extract variables from the environment
+    # Extract the environment variables according to config['ENV'].
+    # When an environment variable does not exist, set its default value according to config['ENV fallback'].
     for key in config['ENV']:
-        if key in config['ENV fallback']:
-            fallback = config['ENV fallback'][key]
-        else:
-            fallback = ""
-        config['ENV'][key] = os.getenv(config['ENV'][key]) or fallback
+        env_name            = config['ENV'][key]
+        env_fallback        = config['ENV fallback'].get(key, '')
+        config['ENV'][key]  = os.environ.get(env_name, env_fallback)
 
     if 'variables' in config:
         for key in config['variables']:
@@ -171,7 +158,7 @@ def configure_suite(config_file):
             )
             if key == "tmp_path" and not os.path.isdir(abs_path):
                 os.mkdir(abs_path)
-            if not os.path.exists(abs_path):
+            if key == "data_path" and not os.path.exists(abs_path):
                 raise ValueError(
                     "Path replacement for {short}: {abspath} does not exist"
                     " (was expanded from {rel})".format(
@@ -197,6 +184,18 @@ def configure_suite(config_file):
             _parameters["timeout"] *= config.getfloat(
                 "General", "memcheck_timeout_penalty", fallback=20.0
             )
+    
+    # Configure the parameters for bash tests
+    BT.Config.bin_dir           = os.path.abspath(config['ENV']['exiv2_path'])
+    BT.Config.dyld_library_path = os.path.abspath(config['ENV']['dyld_library_path'])
+    BT.Config.ld_library_path   = os.path.abspath(config['ENV']['ld_library_path'])
+    BT.Config.data_dir          = os.path.abspath(config['paths']['data_path'])
+    BT.Config.tmp_dir           = os.path.abspath(config['paths']['tmp_path'])
+    BT.Config.exiv2_http        = config['ENV']['exiv2_http']
+    BT.Config.exiv2_port        = config['ENV']['exiv2_port']
+    BT.Config.exiv2_echo        = config['ENV']['exiv2_echo']
+    BT.Config.verbose           = config['ENV']['verbose']
+    BT.Config.valgrind          = config['ENV']['valgrind']
 
 
 class FileDecoratorBase(object):
@@ -572,13 +571,13 @@ def test_run(self):
             )
 
         proc = subprocess.Popen(
-            _cmd_splitter(command),
+            command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             stdin=subprocess.PIPE if stdin is not None else None,
             env=self._get_env(),
             cwd=self.work_dir,
-            shell=_SUBPROCESS_SHELL
+            shell=True,
         )
 
         # Setup a threading.Timer which will terminate the command if it takes
@@ -623,7 +622,7 @@ def test_run(self):
         t.cancel()
 
         def get_decode_error():
-            """ Return an error indicating the the decoding of stdout/stderr
+            """ Return an error indicating the decoding of stdout/stderr
             failed.
             """
             return "Could not decode the output of the command '{!s}' with "\
@@ -966,3 +965,4 @@ def check_no_ASAN_UBSAN_errors(self, i, command, got_stderr, expected_stderr):
 
     self.assertNotIn(UBSAN_MSG, got_stderr)
     self.assertNotIn(ASAN_MSG, got_stderr)
+

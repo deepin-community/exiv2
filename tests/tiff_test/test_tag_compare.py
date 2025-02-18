@@ -28,8 +28,8 @@ class OutputTagExtract(metaclass=system_tests.CaseMeta):
             tmp = line.split()
 
             exif, image, tag = tmp[0].split('.')
-            self.assertEquals(exif, "Exif")
-            self.assertEquals(image, "Image")
+            self.assertEqual(exif, "Exif")
+            self.assertEqual(image, "Image")
 
             data.append({
                 "tag": tag,
@@ -87,20 +87,20 @@ class OutputTagExtract(metaclass=system_tests.CaseMeta):
         """
         for pa_elem, pS_elem in zip(self.pa_data, self.pS_data):
             for key in ["tag", "type", "len"]:
-                self.assertEquals(pa_elem[key], pS_elem[key])
+                self.assertEqual(pa_elem[key], pS_elem[key])
 
             if pa_elem["tag"] in [
                     "ImageWidth", "ImageLength", "BitsPerSample",
                     "DocumentName", "ImageDescription", "StripOffsets",
-                    "SamplesPerPixel", "StripByteCounts", "PlanarConfiguration"]:
-                self.assertEquals(pa_elem["val"], pS_elem["val"])
+                    "SamplesPerPixel", "StripByteCounts"]:
+                self.assertEqual(pa_elem["val"], pS_elem["val"])
 
     def compare_stdout(self, i, command, got_stdout, expected_stdout):
         super().compare_stdout(i, command, got_stdout, expected_stdout)
 
-        if '-pa' in command:
+        if ' -pa ' in command:
             self.pa_data = self.parse_pa(got_stdout.splitlines())
-        if '-pS' in command:
+        if ' -pS ' in command:
             self.pS_data = self.parse_pS(got_stdout.splitlines())
 
         if i == 1:
@@ -128,7 +128,7 @@ Exif.Image.RowsPerStrip                      Short       1  64
 Exif.Image.StripByteCounts                   Long        1  243
 Exif.Image.XResolution                       Rational    1  72
 Exif.Image.YResolution                       Rational    1  72
-Exif.Image.PlanarConfiguration               Short       1  1
+Exif.Image.PlanarConfiguration               Short       1  Chunky
 Exif.Image.ResolutionUnit                    Short       1  inch
 """,
         """STRUCTURE OF TIFF FILE (II): $data_path/mini9.tif

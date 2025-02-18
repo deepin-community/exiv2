@@ -36,7 +36,7 @@
 #
 # Description:
 #  Simple Makefile to create html documentation from templates. Requires
-#  some special tools (awk, python, xsltproc) but really only needs to
+#  some special tools (python3, xsltproc) but really only needs to
 #  be used to update the documentation after changing Exiv2 tags in the
 #  source code.
 #
@@ -50,9 +50,20 @@ TABLES = Exif \
          CanonSi \
          CanonCf \
          CanonPi \
+         CanonTi \
          CanonFi \
          CanonPa \
          CanonPr \
+         CanonMe \
+         CanonHdr \
+         CanonVigCor2 \
+         CanonLiOp \
+         CanonAfMiAdj \
+         CanonLe \
+         CanonAm \
+         CanonFil \
+         CanonAfC \
+         CanonRawB \
          Casio \
          Casio2 \
          Fujifilm \
@@ -69,12 +80,15 @@ TABLES = Exif \
          NikonIi \
          NikonAf \
          NikonAf2 \
+         NikonAf22 \
          NikonAFT \
          NikonFi \
          NikonMe \
          NikonFl1 \
          NikonFl2 \
          NikonFl3 \
+         NikonFl6 \
+         NikonFl7 \
          NikonSiD80 \
          NikonSiD40 \
          NikonSiD300a \
@@ -89,6 +103,7 @@ TABLES = Exif \
          NikonLd1 \
          NikonLd2 \
          NikonLd3 \
+         NikonLd4 \
          Olympus \
          OlympusCs \
          OlympusEq \
@@ -108,10 +123,15 @@ TABLES = Exif \
          SonyMinolta \
          Sony1Cs \
          Sony1Cs2 \
+         Sony2010e \
          Sony1MltCs7D \
          Sony1MltCsOld \
          Sony1MltCsA100 \
-         Sony2Fp
+         Sony2Fp \
+         SonyMisc1 \
+         SonyMisc2b \
+         SonyMisc3c \
+         SonySInfo1
 
 SCHEMA = xmp_dc \
          xmp_dwc \
@@ -147,7 +167,7 @@ SCHEMA = xmp_dc \
          xmp_mwg-rs \
          xmp_mwg-kw
 
-TAGLIST = ${EXIV2HOME}/build/bin/taglist
+TAGLIST = ${EXIV2_BINDIR}/taglist
 
 # **********************************************************************
 # ======================================================================
@@ -168,7 +188,7 @@ tags: $(TABLES) Iptc $(SCHEMA)
 
 $(TABLES):
 	@echo Generating $@ table...
-	@$(TAGLIST) $@ | sed -e"s/</\&lt;/g" -e"s/>/\&gt;/g" | awk -f tags.awk > $@.xml
+	@$(TAGLIST) $@ | sed -e"s/</\&lt;/g" -e"s/>/\&gt;/g" | python3 tags.py > $@.xml
 	@xsltproc tags.xsl $@.xml > $@.tmp
 	@sed "s/report1/$@/" $@.tmp > __$@__
 	@touch $@
@@ -177,7 +197,7 @@ $(TABLES):
 Iptc:
 	@echo Generating $@ table...
 	@$(TAGLIST) $@ | sed -e"s/</\&lt;/g" -e"s/>/\&gt;/g" -e"s/�/\&#177;/g" \
-	               | awk -f iptc.awk > $@.xml
+	               | python3 iptc.py > $@.xml
 	@xsltproc iptc.xsl $@.xml > $@.tmp
 	@sed "s/report1/$@/g" $@.tmp > __$@__
 	@touch $@
@@ -185,7 +205,7 @@ Iptc:
 
 $(SCHEMA):
 	@echo Generating $@ table...
-	@echo $@ | sed "s/xmp_//" | xargs $(TAGLIST) | sed -e"s/</\&lt;/g" -e"s/>/\&gt;/g" | awk -f xmp.awk > $@.xml
+	@echo $@ | sed "s/xmp_//" | xargs $(TAGLIST) | sed -e"s/</\&lt;/g" -e"s/>/\&gt;/g" | python3 xmp.py > $@.xml
 	@xsltproc xmp.xsl $@.xml > $@.tmp
 	@sed "s/report1/$@/" $@.tmp > __$@__
 	@touch $@
