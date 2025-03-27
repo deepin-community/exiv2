@@ -28,7 +28,8 @@ fi
         exiv2-sony-dsc-w7.jpg \
         exiv2-canon-eos-20d.jpg \
         exiv2-canon-eos-d30.jpg \
-        exiv2-canon-powershot-a520.jpg"
+        exiv2-canon-powershot-a520.jpg \
+        exiv2-photoshop.psd"
 
     image2="exiv2-empty.jpg \
         20031214_000043.jpg \
@@ -44,7 +45,8 @@ fi
         20050527_051833.jpg \
         20060802_095200.jpg \
         20001004_015404.jpg \
-        20060127_225027.jpg"
+        20060127_225027.jpg \
+        20110626_213900.psd"        
 
     image3="exiv2-empty.exv \
         20031214_000043.exv \
@@ -60,9 +62,10 @@ fi
         20050527_051833.exv \
         20060802_095200.exv \
         20001004_015404.exv \
-        20060127_225027.exv"
+        20060127_225027.exv \
+        20110626_213900.exv"
 
-    for i in $images; do copyTestFile $i; done
+    for i in $images; do copyTestFile $i; done ; copyTestFile 20110626_213900.psd
     echo "Exiv2 test directory -----------------------------------------------------"
     cd "$testdir"
 

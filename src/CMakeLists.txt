@@ -19,6 +19,7 @@ add_library( exiv2lib_int OBJECT
     fujimn_int.cpp          fujimn_int.hpp
     helper_functions.cpp    helper_functions.hpp
     image_int.cpp           image_int.hpp
+    jp2image_int.cpp        jp2image_int.hpp
     makernote_int.cpp       makernote_int.hpp
     minoltamn_int.cpp       minoltamn_int.hpp
     nikonmn_int.cpp         nikonmn_int.hpp
@@ -46,7 +47,6 @@ add_library( exiv2lib
     ../include/exiv2/rwlock.hpp
     ../include/exiv2/slice.hpp
     basicio.cpp             ../include/exiv2/basicio.hpp
-    bigtiffimage.cpp
     bmpimage.cpp            ../include/exiv2/bmpimage.hpp
     convert.cpp             ../include/exiv2/convert.hpp
     cr2image.cpp            ../include/exiv2/cr2image.hpp
@@ -119,6 +119,10 @@ if( EXIV2_ENABLE_VIDEO )
     )
 endif()
 
+target_sources(exiv2lib PRIVATE
+    bmffimage.cpp           ../include/exiv2/bmffimage.hpp
+)
+
 # Other library target properties
 # ---------------------------------------------------------
 
@@ -144,8 +148,20 @@ set_target_properties( exiv2lib_int PROPERTIES
     COMPILE_DEFINITIONS exiv2lib_EXPORTS
 )
 
+# NOTE: Cannot use target_link_libraries on OBJECT libraries with old versions of CMake
 target_include_directories(exiv2lib_int PRIVATE ${ZLIB_INCLUDE_DIR})
-target_include_directories(exiv2lib PRIVATE ${ZLIB_INCLUDE_DIR})
+target_include_directories(exiv2lib SYSTEM PRIVATE 
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/xmpsdk/include>
+)
+
+if (EXIV2_ENABLE_XMP OR EXIV2_ENABLE_EXTERNAL_XMP)
+    target_include_directories(exiv2lib PRIVATE ${EXPAT_INCLUDE_DIR})
+    target_link_libraries(exiv2lib PRIVATE ${EXPAT_LIBRARIES})
+
+    if (WIN32)
+        target_compile_definitions(exiv2lib PRIVATE XML_STATIC)
+      endif()
+endif()
 
 if (EXIV2_ENABLE_XMP)
     target_link_libraries(exiv2lib PRIVATE exiv2-xmp)
@@ -159,7 +175,7 @@ endif()
 target_include_directories(exiv2lib PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/exiv2>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_include_directories(exiv2lib_int PUBLIC
@@ -189,7 +205,9 @@ if (EXIV2_ENABLE_WEBREADY)
 endif()
 
 if (WIN32)
-    target_compile_definitions(exiv2lib PRIVATE PSAPI_VERSION=1) # to be compatible with <= WinVista (#905)
+    target_compile_definitions(exiv2lib PRIVATE PSAPI_VERSION=1)    # to be compatible with <= WinVista (#905)
+    # Since windows.h is included in some headers, we need to propagate this definition
+    target_compile_definitions(exiv2lib PUBLIC WIN32_LEAN_AND_MEAN) 
 endif()
 
 if (NOT MSVC)
@@ -207,7 +225,7 @@ else()
 endif()
 
 if( EXIV2_ENABLE_PNG )
-    target_link_libraries( exiv2lib PRIVATE ${ZLIB_LIBRARIES} )
+	target_link_libraries( exiv2lib PRIVATE ZLIB::ZLIB)
 endif()
 
 if( EXIV2_ENABLE_NLS )
@@ -215,7 +233,8 @@ if( EXIV2_ENABLE_NLS )
     target_include_directories(exiv2lib PRIVATE ${Intl_INCLUDE_DIRS})
     target_include_directories(exiv2lib_int PRIVATE ${Intl_INCLUDE_DIRS})
     # Definition needed for translations
-    target_compile_definitions(exiv2lib PUBLIC EXV_LOCALEDIR="/../${CMAKE_INSTALL_LOCALEDIR}")
+    join_paths(EXV_LOCALEDIR ".." "${CMAKE_INSTALL_LOCALEDIR}")
+    target_compile_definitions(exiv2lib PUBLIC EXV_LOCALEDIR="${EXV_LOCALEDIR}")
 endif()
 
 if( ICONV_FOUND )
@@ -255,6 +274,9 @@ if(EXIV2_BUILD_EXIV2_COMMAND)
         COMPILE_FLAGS ${EXTRA_COMPILE_FLAGS}
         XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS[variant=Debug] "YES"
     )
+    if (MSVC)
+        set_target_properties(exiv2 PROPERTIES LINK_FLAGS "/ignore:4099") # Ignore missing PDBs
+    endif()
 
     target_link_libraries( exiv2 PRIVATE exiv2lib )
 
