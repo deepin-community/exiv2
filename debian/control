@@ -2,21 +2,21 @@ Source: exiv2
 Section: graphics
 Priority: optional
 Maintainer: Debian KDE Extras Team <pkg-kde-extras@lists.alioth.debian.org>
-Uploaders: Mark Purcell <msp@debian.org>, Steve M. Robbins <smr@debian.org>,
-           Maximiliano Curia <maxy@debian.org>
+Uploaders: Mark Purcell <msp@debian.org>,
+           Steve M. Robbins <smr@debian.org>
 Build-Depends: chrpath,
-               cmake,
-               debhelper-compat (= 12),
+               cmake (>= 3.7.2~),
+               debhelper-compat (= 13),
                gettext,
                libexpat1-dev,
                pkg-kde-tools,
-               zlib1g-dev
+               zlib1g-dev,
 Build-Depends-Indep: doxygen, graphviz, libjs-jquery, xsltproc
-Standards-Version: 4.5.0
+Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Homepage: https://www.exiv2.org/
-Vcs-Browser: https://salsa.debian.org/qt-kde-team/extras/exiv2
-Vcs-Git: https://salsa.debian.org/qt-kde-team/extras/exiv2.git
+Vcs-Browser: https://salsa.debian.org/qt-kde-team/3rdparty/exiv2
+Vcs-Git: https://salsa.debian.org/qt-kde-team/3rdparty/exiv2.git
 
 Package: exiv2
 Architecture: any
@@ -70,6 +70,7 @@ Description: EXIF/IPTC/XMP metadata manipulation library
 Package: libexiv2-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: libexiv2-27 (= ${binary:Version}), ${misc:Depends}
 Breaks: libexiv2-27 (<< 0.27.2-8~)
 Replaces: libexiv2-27 (<< 0.27.2-8~)
@@ -85,6 +86,7 @@ Package: libexiv2-doc
 Depends: libjs-jquery, ${misc:Depends}
 Section: doc
 Architecture: all
+Multi-Arch: foreign
 Description: EXIF/IPTC/XMP metadata manipulation library - HTML documentation
  Exiv2 is a C++ library and a command line utility to manage image metadata.
  It provides fast and easy read and write access to the Exif, IPTC and XMP

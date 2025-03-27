@@ -43,6 +43,7 @@ Exif.CanonCs.Quality                         Short       1  Superfine
 Exif.CanonCs.FlashMode                       Short       1  Auto
 Exif.CanonCs.DriveMode                       Short       1  Single / timer
 Exif.CanonCs.FocusMode                       Short       1  Single
+Exif.CanonCs.RecordMode                      Short       1  JPEG
 Exif.CanonCs.ImageSize                       Short       1  Large
 Exif.CanonCs.EasyMode                        Short       1  Manual
 Exif.CanonCs.DigitalZoom                     Short       1  None
@@ -93,7 +94,7 @@ Exif.Canon.FileNumber                        Long        1  117-1771
 Exif.Canon.OwnerName                         Ascii      32  Andreas Huggel
 Exif.Canon.ModelID                           Long        1  PowerShot S40
 Exif.Canon.CameraInfo                        Short      21  42 3 32769 378 32769 0 0 0 259 2 0 10 0 0 0 57 198 5 0 0 0
-Exif.Photo.UserComment                       Undefined 264  binary comment
+Exif.Photo.UserComment                       Undefined 264  
 Exif.Photo.FlashpixVersion                   Undefined   4  1.00
 Exif.Photo.ColorSpace                        Short       1  sRGB
 Exif.Photo.PixelXDimension                   Short       1  2272
